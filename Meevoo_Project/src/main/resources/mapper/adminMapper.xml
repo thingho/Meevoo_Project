@@ -1,0 +1,418 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.mapper.AdminMapper">
+<!-- adminStatic -->
+
+<!-- 1. 제일 상단 4가지 들고오기 -->
+
+	   <!-- 1) 접속자수를 리스트에 채워서 데려오기 -->
+	   <!-- 데이터가 5000개임에도 불구하고 시간별로 자르면 5명 이런식으로 나와서 12시간 기준으로 잘라서 들고옴 -->
+	   <select id="selectSHTwo" resultType="com.java.dto.StaticHeadTwoDto">
+	            <![CDATA[
+	            SELECT (SELECT COUNT(*) FROM loginpeople WHERE logDate = TRUNC(SYSDATE)
+				     AND ((SYSDATE < TO_DATE('12:00:00', 'HH24:MI:SS') 
+				        AND loginTime >= TO_DATE('00:00:00', 'HH24:MI:SS') 
+				        AND loginTime < TO_DATE('12:00:00', 'HH24:MI:SS')
+				      ) OR
+				       (SYSDATE >= TO_DATE('12:00:00', 'HH24:MI:SS') 
+				        AND loginTime >= TO_DATE('12:00:00', 'HH24:MI:SS') 
+				        AND loginTime <= TO_DATE('23:59:59', 'HH24:MI:SS')))) AS totallogin
+				FROM dual
+	            ]]>
+		</select>
+		
+	   <!-- 2) 신규가입자, 최근 게시물, 최근리뷰 값을 리스트에 채워서 데려오기 -->
+	   <select id="selectSHOne" resultType="com.java.dto.StaticHeadOneDto">
+		    SELECT
+		        (SELECT COUNT(*) FROM userlist WHERE joinDate 
+		         BETWEEN (TRUNC(SYSDATE, 'MM')) AND (LAST_DAY(SYSDATE))) AS newjoinuser,
+		        (SELECT COUNT(*) FROM clublist WHERE cWrDate 
+		         BETWEEN (TRUNC(SYSDATE, 'MM')) AND (LAST_DAY(SYSDATE))) AS newclub,
+		        (SELECT COUNT(*) FROM sportreview WHERE sReDate 
+		         BETWEEN (TRUNC(SYSDATE, 'MM')) AND (LAST_DAY(SYSDATE))) AS newreview
+		    FROM dual
+		</select>
+   
+
+ 
+
+<!-- 2. 그래프 두가지 들고오기 -->
+
+	  <!-- 1) 회원그래프 데이터 가져오기 -->
+	  <select id="selectUserGraphAll" resultType="com.java.dto.UserGraphDto">
+			<![CDATA[SELECT
+			    t1.joinMonth,
+			    t1.joinuser AS newuser,
+			    t2.alluser AS totaluser,
+			    t3.quituser AS quituser
+			FROM
+			    (SELECT
+			        TO_CHAR(joinDate, 'YYYYMM') AS joinMonth,
+			        COUNT(*) AS joinuser
+			    FROM
+			        userlist
+			    WHERE
+			        joinDate >= '20230101' AND joinDate < '20230731'
+			        AND nowjoin = '1'
+			    GROUP BY
+			        TO_CHAR(joinDate, 'YYYYMM')) t1
+			JOIN
+			    (SELECT
+			        TO_CHAR(joinDate, 'YYYYMM') AS joinMonth,
+			        SUM(COUNT(*)) OVER (ORDER BY TO_CHAR(joinDate, 'YYYYMM') ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS alluser
+			    FROM
+			        userlist
+			    WHERE
+			        joinDate >= '20230101' AND joinDate < '20230731'
+			    GROUP BY
+			        TO_CHAR(joinDate, 'YYYYMM')) t2 ON t1.joinMonth = t2.joinMonth
+			JOIN
+			    (SELECT
+			        TO_CHAR(joinDate, 'YYYYMM') AS joinMonth,
+			        COUNT(*) AS quituser
+			    FROM
+			        userlist
+			    WHERE
+			        joinDate >= '20230101' AND joinDate < '20230731'
+			        AND nowjoin = '0'
+			    GROUP BY
+			        TO_CHAR(joinDate, 'YYYYMM')) t3 ON t1.joinMonth = t3.joinMonth
+			ORDER BY
+			    t1.joinMonth ASC
+			    ]]>
+	  </select>
+	  
+	  <!-- 2) 게시물 그래프 데이터 가져오기 -->
+	  <select id="selectWriteGraphAll" resultType="com.java.dto.WriteGraphDto">
+			<![CDATA[SELECT
+			    t1.writeMonth,
+			    t1.clubWrite AS clubWrite,
+			    t2.sportReview AS sportReview
+			FROM
+			    (SELECT 
+			        TO_CHAR(cWrDate, 'YYYYMM') AS writeMonth,
+			        COUNT(*) AS clubWrite
+			    FROM 
+			        clublist 
+			    WHERE
+			        cWrDate >= '20230101' AND cWrDate <= '20230731'
+			    GROUP BY
+			        TO_CHAR(cWrDate, 'YYYYMM')
+			    ORDER BY
+			        writeMonth ASC) t1
+			JOIN
+			    (SELECT 
+			        TO_CHAR(sReDate, 'YYYYMM') AS writeMonth,
+			        COUNT(*) AS sportReview
+			    FROM 
+			        sportReview 
+			    WHERE
+			        sReDate >= '20230101' AND sReDate <= '20230731'
+			    GROUP BY
+			        TO_CHAR(sReDate, 'YYYYMM')
+			    ORDER BY
+			        writeMonth ASC) t2 ON t1.writeMonth = t2.writeMonth
+			ORDER BY
+			    t1.writeMonth ASC
+			
+			
+			    ]]>
+	  </select>
+  
+
+<!-- 3. 시설 문의 게시물 -->
+
+	   <!-- 1) Sport 신고 게시물 상위 5개 -->
+	   <select id="selectSFive" resultType="com.java.dto.SportReportDto">
+	      <![CDATA[
+	      select * 
+		  from (select *
+	      		from sportreport 
+	     		 order by sRepDate desc
+	      		)
+		  where rownum <= 10
+		  ]]>
+	   </select>
+	   
+	   <!-- 2) Sport 신고 게시물 1개 가져오기 -->
+	   <select id="selectSROne" resultType="com.java.dto.SportReportDto">
+	      select * from sportreport where srepno = #{srepno}
+	   </select>
+
+
+
+<!-- 4. 모임 신고 게시물 -->
+
+	   <!-- 1) 모임 신고 게시물 상위 5개 -->
+	   <select id="selectCFive" resultType="com.java.dto.ClubReportDto">
+	      <![CDATA[
+	      select * 
+		  from ( select *
+	     		 from clubreport 
+	     		 order by cRepDate desc
+	      		)
+		  where rownum <= 10
+		  ]]>
+	   </select>
+	 
+	   <!-- 2) 모임 신고 게시물 1개 가져오기 -->
+	   <select id="selectCROne" resultType="com.java.dto.ClubReportDto">
+	      select * from clubreport where crepno = #{crepno}
+	   </select>
+   
+
+<!-- 5. 오른쪽 하단 도넛 그래프 -->
+	<!-- main_yang.js파일에 있음 -->
+		   <!-- 1) 모임 - 스포츠 종류별 count -->
+		    <select id="selectDonutChartClub" resultType="com.java.dto.DonutChartsClubDto">
+		       SELECT
+				  SUM(CASE WHEN scate = '골프' THEN 1 ELSE 0 END) AS golf_count,
+				  SUM(CASE WHEN scate = '농구' THEN 1 ELSE 0 END) AS basketball_count,
+				  SUM(CASE WHEN scate = '배드민턴' THEN 1 ELSE 0 END) AS badminton_count,
+				  SUM(CASE WHEN scate = '볼링' THEN 1 ELSE 0 END) AS bowling_count,
+				  SUM(CASE WHEN scate = '스케이트' THEN 1 ELSE 0 END) AS skate_count,
+				  SUM(CASE WHEN scate = '클라이밍' THEN 1 ELSE 0 END) AS climbing_count,
+				  SUM(CASE WHEN scate = '탁구' THEN 1 ELSE 0 END) AS pingpong_count,
+				  SUM(CASE WHEN scate = '테니스' THEN 1 ELSE 0 END) AS tennis_count,
+				  SUM(CASE WHEN scate = '풋살' THEN 1 ELSE 0 END) AS soccer_count
+				FROM clublist
+		    </select>   
+ 
+		   <!-- 2) 시설리뷰 - 스포츠 종류별 count -->
+				<!-- 이거 아직 못함.. -->
+
+
+
+<!-- =========================================================================================================== -->
+
+
+<!-- 1. totalUser -->
+
+    <!-- 1) 전체 회원 하단 넘버링  -->
+	  <select id="selectAll" resultType="com.java.dto.MemberDto">
+	     select * from ( select rownum rnum,a.* from
+			(select * from userlist 
+		   <if test="search.category == 'all'">
+			   where id like '%'||#{search.search_input}||'%' 
+			   or usernm like '%'||#{search.search_input}||'%' 
+			   or nicknm like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'id'">
+			   where id like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'usernm'">
+			   where usernm like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'nicknm'">
+			   where nicknm like '%'||#{search.search_input}||'%'
+		   </if>
+			order by joindate desc) a
+			)where rnum between #{startRow} and #{endRow}
+	   </select>
+    <!--2) 전체 회원 가져오기 : 하단 넘버링을 위한 카운트!   -->
+	   <select id="selectMemberListCount" resultType="int">
+	      select count(*) from userlist
+	      <if test="category == 'all'">
+			   where id like '%'||#{search_input}||'%' 
+			   or usernm like '%'||#{search_input}||'%' 
+			   or nicknm like '%'||#{search_input}||'%'
+		   </if>
+		   <if test="category == 'id'">
+			   where id like '%'||#{search_input}||'%'
+		   </if>
+		   <if test="category == 'usernm'">
+			   where usernm like '%'||#{search_input}||'%'
+		   </if>
+		   <if test="category == 'nicknm'">
+			   where nicknm like '%'||#{search_input}||'%'
+		   </if>
+	   </select>
+   
+   <!-- 3) 회원 추가하기 -->
+	   <insert id="insertMember">
+	      insert into userlist values(#{id},#{pw},#{usernm},#{nicknm},#{birth},#{email},#{gender},#{dongcate},#{scate},
+	      #{userimg},#{selfintro},sysdate,1,36.5,#{addr})
+	   </insert>
+   
+   <!-- 4) 수정할 회원정보 가져오기 -->
+	   <select id="selectTUMOne">
+	      select * from userlist where id=#{id}
+	   </select>
+   
+   <!-- 5) 회원 수정사항 저장하기 -->
+	   <update id="updateTUMOne">
+	      update userlist set 
+			  <if test="userimg != null">
+		      id=#{id},pw=#{pw}, usernm=#{usernm}, nicknm=#{nicknm}, birth=#{birth}, email=#{email}, gender=#{gender}, dongcate=#{dongcate}, 
+		      userimg=#{userimg},scate=#{scate}, selfintro=#{selfintro},addr=#{addr},nowjoin=#{nowjoin}
+		      where id=#{id}
+		      </if>
+		      <if test="userimg == null">
+		      id=#{id},pw=#{pw}, usernm=#{usernm}, nicknm=#{nicknm}, birth=#{birth}, email=#{email}, gender=#{gender}, dongcate=#{dongcate}, 
+		      scate=#{scate}, selfintro=#{selfintro},addr=#{addr},nowjoin=#{nowjoin}
+		      where id=#{id}
+		      </if>
+	   </update>
+   
+   <!-- 6) 회원 탈퇴처리하기 -->
+	   <update id="deleteTUMOne">
+	      update userlist set 
+	      nowjoin=0 where id=#{id}
+	   </update>
+   
+   
+   
+   
+<!-- 2. totalUser -->   
+   
+   <!-- 1) 전체 모임 하단 넘버링  -->
+	   <select id = "selectClubAll" resultType="com.java.dto.ClubDto">
+	      select * from ( select rownum rnum,a.* from
+			(select * from clublist 
+			
+			
+		   <if test="search.category == 'all'">
+			   where id like '%'||#{search.search_input}||'%' or cnm like '%'||#{search.search_input}||'%' or sfno like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'id'">
+			   where id like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'cnm'">
+			   where cnm like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'sfno'">
+			   where sfno like '%'||#{search.search_input}||'%'
+		   </if>
+			
+			order by cWrDate desc) a
+			)where rnum between #{pageDto1.startRow} and #{pageDto1.endRow}
+	   </select>
+   
+   <!-- 2) 전체 모임 가져오기 -->
+	   <select id = "selectClubListCount" resultType="int">
+	      select count(*) from clublist
+	      
+	      <if test="category == 'all'">
+			   where id like '%'||#{search_input}||'%' or cnm like '%'||#{search_input}||'%' or sfno like '%'||#{search_input}||'%'
+		   </if>
+		   <if test="category == 'id'">
+			   where id like '%'||#{search_input}||'%'
+		   </if>
+		   <if test="category == 'cnm'">
+			   where cnm like '%'||#{search_input}||'%'
+		   </if>
+		   <if test="category == 'sfno'">
+			   where sfno like '%'||#{search_input}||'%'
+		   </if>
+	      
+	   </select>
+
+	<!-- 새로 모임 추가할때 시설 리스트중에서 선택하게 리스트 가져오기 -->
+	  <select id="selectSportList">
+	     select * from sportlist
+	  </select>
+
+
+
+
+
+   <!-- 3) 모임 추가하기 -->
+	   <insert id="insertClub">
+	      insert into clubList values 
+			(
+			clubList_seq.nextval,
+			#{id},
+			#{cnm},
+			sysdate,
+			#{cimg},
+			#{sfno},
+			(select dongcate from sportlist where sfno = #{sfno}),
+			#{cloc},
+			#{cdodate},
+			#{ccontent},
+			null,
+			#{crecruitlimit},
+			null,
+			#{cnowstatus},
+			#{scate},
+			sysdate,
+			sysdate
+			)
+	   </insert>
+   
+<!-- 수정하기 - 시설번호 전체 가져오기 -->
+	  <select id="selectSportModifyList">
+	     select * from sportlist
+	  </select>
+   
+   
+   <!-- 4) 수정할 모임 정보 가져오기 -->
+	   <select id="selectTCMOne">
+	      select * from clublist where cno=#{cno}
+	   </select>   
+   
+   <!-- 5) 모임 수정사항 저장하기 -->
+	   <update id="updateTCMOne">
+	      update clublist set 
+	   
+	      <if test="cimg != null">
+	      cno=#{cno},id=#{id}, cnm=#{cnm}, cwrdate=#{cwrdate}, cimg=#{cimg}, sfno=#{sfno}, dongcate=#{dongcate}, cloc=#{cloc}, 
+	      cdodate=#{cdodate},ccontent=#{ccontent}, crecruitlimit=#{crecruitlimit},cnowstatus=#{cnowstatus},scate=#{scate}
+	      where cno=#{cno}
+	      </if>
+	      <if test="cimg == null">
+	      cno=#{cno},id=#{id}, cnm=#{cnm}, cwrdate=#{cwrdate}, sfno=#{sfno}, dongcate=#{dongcate}, cloc=#{cloc}, 
+	      cdodate=#{cdodate},ccontent=#{ccontent}, crecruitlimit=#{crecruitlimit},cnowstatus=#{cnowstatus},scate=#{scate}
+	      where cno=#{cno}
+	      </if>
+	   
+	   </update> 
+   
+   <!-- 6) 모임 삭제하기 -->
+	   <delete id="deleteTCMOne">
+	     delete clublist where cno=#{cno}
+	  </delete>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+
+</mapper>

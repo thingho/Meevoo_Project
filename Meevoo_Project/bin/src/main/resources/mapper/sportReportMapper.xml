@@ -1,0 +1,102 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.mapper.SportReportMapper">
+	
+	<!-- 문의글 전체 개수 -->
+	<select id="selectListCount" resultType="int">
+		select count(*) from sportreport
+		<if test="category == 'all'">
+		   where sreptitle like '%'||#{srep_word}||'%' or srepcontent like '%'||#{srep_word}||'%'
+		</if>
+		<if test="category == 'sreptitle'">
+		   where sreptitle like '%'||#{srep_word}||'%'
+		</if>
+		<if test="category == 'srepcontent'">
+		   where srepcontent like '%'||#{srep_word}||'%'
+		</if>
+	</select>
+	
+	<!-- 문의글 전체 가져오기 -->
+	<select id="selectAll" resultType="com.java.dto.SportReportDto">
+		select * from (select rownum rnum, a.* from
+		(select * from sportreport
+		
+		<if test="category == 'all'">
+		   where sreptitle like '%'||#{srep_word}||'%' or srepcontent like '%'||#{srep_word}||'%'
+		</if>
+		<if test="category == 'sreptitle'">
+		   where sreptitle like '%'||#{srep_word}||'%'
+		</if>
+		<if test="category == 'srepcontent'">
+		   where srepcontent like '%'||#{srep_word}||'%'
+		</if>
+		
+		<!-- 아랫부분 공통영역 -->
+		<![CDATA[
+		   order by srepdate desc) a)
+		   where rnum>=#{startRow} and rnum<=#{endRow}
+		]]>
+	</select>
+	
+	<!-- 문의글 1개 가져오기 -->
+	<select id="selectOne" resultType="com.java.dto.SportReportDto">
+		select * from sportreport where srepno=#{srepno}
+	</select>
+	
+	<!-- 문의글 작성으로 인한 시설번호 전체 가져오기 -->
+	<select id="selectSfno" resultType="com.java.dto.SportDto">
+		select sfno from sportlist
+	</select>
+	<!-- 문의글 1개 저장하기 -->
+	<insert id="insertOne">
+		insert into sportreport
+		values(sportreport_seq.nextval,#{id},#{sfno},#{srepcontent},
+		sysdate,#{srepinput},#{srepimg},#{sreptitle})
+	</insert>
+	
+	<!-- 문의글 1개 수정하기 -->
+	<update id="updateOne">
+		update sportreport set
+		<if test="srepimg != null">
+		srepcontent=#{srepcontent}, srepdate=sysdate,
+		srepinput=#{srepinput},srepimg=#{srepimg},sreptitle=#{sreptitle} where srepno=#{srepno}
+		</if>
+		<if test="srepimg == null">
+		srepcontent=#{srepcontent}, srepdate=sysdate,
+		srepinput=#{srepinput},sreptitle=#{sreptitle} where srepno=#{srepno}
+		</if>
+	</update>
+	
+	<!-- 문의글 1개 삭제하기 -->
+	<delete id="deleteOne">
+		delete sportreport where srepno=#{srepno}
+	</delete>
+	
+	
+	
+	<!-- 문의글 답변 저장하기 -->
+	<insert id="answerInsert">
+	  <selectKey resultType="int" keyProperty="srepanno" order="BEFORE">
+		select sportreviewanswer_seq.nextval from dual
+	  </selectKey>
+	  insert into sportreviewanswer values
+	  (#{srepanno},#{srepno},#{id},#{srepancontent},sysdate)
+	</insert>
+	
+	<!-- 문의글 답변 모두 가져오기 -->
+	<select id="selectAnAll" resultType="com.java.dto.SportReviewAnswerDto">
+		select * from sportreviewanswer where srepno=#{srepno} order by srepandate desc
+	</select>
+	
+	<!-- 답변 1개 가져오기 -->
+	<select id="selectAnOne" resultType="com.java.dto.SportReviewAnswerDto">
+		select * from sportreviewanswer where srepanno=#{srepanno}
+	</select>
+	<!-- 답변 1개 삭제하기 -->
+	<delete id="answerDelete">
+		delete sportreviewanswer where srepanno=#{srepanno}
+	</delete>
+
+</mapper>

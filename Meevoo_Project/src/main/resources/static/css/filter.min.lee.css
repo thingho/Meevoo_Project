@@ -1,0 +1,384 @@
+@import url("nouislide.css");
+#filter {
+	width: 100%;
+	max-width: 750px;
+	z-index: 15;
+	background: #F2F3F7;
+	margin: 0 auto;
+	min-height: 100vh;
+}
+#filter .inner {
+	position: relative;
+	padding: 115px 20px 0;
+	box-sizing: border-box;
+}
+#filter .top {
+	background: #F2F3F7;
+	position: fixed;
+    top: 0;
+    width: 100%;
+    max-width: 750px;
+    z-index: 7;
+    box-sizing: border-box;
+}
+#filter .top h2 {
+    padding-top: 45px;
+    padding-left: 17px;
+    margin-bottom: 10px;
+}
+#filter .close {
+	display: block;
+	position: fixed;
+    right: 20px;
+    width: 22px;
+    height: 22px;
+    margin-top: 22px;
+    top: 2px;
+    z-index: 7;
+	background: url("../images/ico-close.png")no-repeat 50% 50% / 100%;
+}
+#filter h2 {
+	font-size: 22px;
+	padding-top: 62px;
+	font-weight: 500;
+	margin-bottom: 25px;
+}
+
+#s-result {
+	position: absolute;
+    right: 22px;
+    margin-top: -35px;
+    width: calc(100% - 65px);
+    text-align: right;
+}
+#s-result span {
+	display: inline-block;
+	color: #2851E8;
+	font-size: 15px;
+	margin: 0 5px;
+	font-weight: 300;
+}
+.type-exer > div {
+	float: left;
+	width: calc(25% - 7.5px);
+	margin: 0 10px 10px 0;
+}
+.type-exer > div:nth-child(4n) {
+	margin-right: 0;
+}
+.type-exer > div input[type=checkbox] {
+	display: none;
+}
+.type-exer > div input[type=checkbox] + label {
+	position: relative;
+	display: block;
+	border: 1px solid #8f8f8f;
+	width: 100%;
+	text-align: center;
+	background: #fff;
+	border-radius: 25px;
+	font-size: 14px;
+	padding: 10px 0;
+	font-weight: 300;
+	box-shadow: 0 10px 10px rgb(0 0 0 / 10%);
+	color: #4d4d4d;
+	box-sizing: border-box;
+}
+.type-exer > div input[type=checkbox] + label:before {
+    content: '';
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+    opacity: .5;
+	display: block;
+    width: 45px;
+    height: 40px;
+    margin: 0 auto;
+}
+.type-exer > div input[type=checkbox] + label[for=exer01]:before,
+.type-exer > div input[type=checkbox] + label[for=exer01_2]:before {
+	background-image: url("../images/ico-health.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer02]:before,
+.type-exer > div input[type=checkbox] + label[for=exer02_2]:before {
+	background-image: url("../images/ico-golf.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer03]:before,
+.type-exer > div input[type=checkbox] + label[for=exer03_2]:before {
+	background-image: url("../images/ico-cycle.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer04]:before,
+.type-exer > div input[type=checkbox] + label[for=exer04_2]:before {
+	background-image: url("../images/ico-clim.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer05]:before,
+.type-exer > div input[type=checkbox] + label[for=exer05_2]:before {
+	background-image: url("../images/ico-soccer.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer06]:before,
+.type-exer > div input[type=checkbox] + label[for=exer06_2]:before {
+	background-image: url("../images/ico-basketball.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer07]:before,
+.type-exer > div input[type=checkbox] + label[for=exer07_2]:before {
+	background-image: url("../images/ico-baseball.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer08]:before,
+.type-exer > div input[type=checkbox] + label[for=exer08_2]:before {
+	background-image: url("../images/ico-pingpong.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer09]:before,
+.type-exer > div input[type=checkbox] + label[for=exer09_2]:before {
+	background-image: url("../images/ico-tennis.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer10]:before,
+.type-exer > div input[type=checkbox] + label[for=exer10_2]:before {
+	background-image: url("../images/ico-badminton.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer11]:before,
+.type-exer > div input[type=checkbox] + label[for=exer11_2]:before {
+	background-image: url("../images/ico-running.png");
+}
+.type-exer > div input[type=checkbox] + label[for=exer12]:before,
+.type-exer > div input[type=checkbox] + label[for=exer12_2]:before {
+	background-image: url("../images/ico-bowling.png");
+}
+
+.type-exer > div input[type=checkbox]:checked + label {
+    color: #000;
+    box-shadow: inset 0 6px 4px rgb(0 0 0 / 20%);
+    font-weight: 400;
+}
+.type-exer > div input[type=checkbox]:checked + label:before {
+	opacity: 1;
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer01]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer01_2]:before {
+	background-image: url("../images/ico-health.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer02]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer02_2]:before {
+	background-image: url("../images/ico-golf.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer03]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer03_2]:before {
+	background-image: url("../images/ico-cycle.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer04]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer04_2]:before {
+	background-image: url("../images/ico-clim.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer05]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer05_2]:before {
+	background-image: url("../images/ico-soccer.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer06]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer06_2]:before {
+	background-image: url("../images/ico-basketball.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer07]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer07_2]:before {
+	background-image: url("../images/ico-baseball.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer08]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer08_2]:before {
+	background-image: url("../images/ico-pingpong.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer09]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer09_2]:before {
+	background-image: url("../images/ico-tennis.svg");
+	background-position: 50% 2px;
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer10]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer10_2]:before {
+	background-image: url("../images/ico-badminton.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer11]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer11_2]:before {
+	background-image: url("../images/ico-running.svg");
+}
+.type-exer > div input[type=checkbox]:checked + label[for=exer12]:before,
+.type-exer > div input[type=checkbox]:checked + label[for=exer12_2]:before {
+	background-image: url("../images/ico-bowling.svg");
+}
+
+.type-exer > div input[type=checkbox]:checked + label:after {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	border: 1px solid #2851E8;
+    border-radius: 25px;
+}
+
+.type-exer > div.btn-area {
+	display: flex;
+	width: 100%;
+	margin: 0;
+}
+.type-exer > div.btn-area > div {
+	float: left;
+	display: block;
+	width: 50%;
+}
+.type-exer > div.btn-area label {
+	padding: 14px 0!important;
+}
+.type-exer > div.btn-area label:before {
+	display: none!important;
+}
+.type-exer > div.btn-area > div:first-child {
+	margin-right: 10px;
+}
+
+
+.filter-select > div {
+	position: relative;
+}
+.filter-select .filter-text {
+	position: absolute;
+    top: -50px;
+    right: 0;
+    font-size: 15px;
+}
+.filter-select .filter-text span {
+	float: left;
+	color: #2851E8;
+}
+.filter-select-line-wrap {
+	position: relative;
+    width: 95%;
+    z-index: 0;
+    margin: 0 auto;
+}
+.filter-select03 {
+    background: #ededed;
+}
+.filter-select-line {
+	position: absolute;
+    top: 10px;
+    width: 1px;
+    height: 10px;
+    background: #8f8f8f;
+}
+@supports (-webkit-overflow-scrolling: touch) {
+	.filter-select-line.l0 {
+		left: 1px!important;
+	}
+}
+.filter-select-line span {
+	display: block;
+    width: 50px;
+    font-size: 12px;
+    color: #999;
+    margin-left: -25px;
+    margin-top: 15px;
+    font-weight: 300;
+    text-align: center;
+}
+div.hslider { 
+	padding: 0; 
+	width: 95%; 
+	height: 5px; 
+	background-color: #ededed; 
+	margin: 0 auto;
+}
+.filter-btn-area {
+	font-size: 0;
+	padding: 85px 0 35px;
+}
+.filter-btn-area button {
+	display: inline-block;
+	vertical-align: top;
+	font-size: 15px;
+	width: calc(50% - 10px);
+	height: 50px;
+	border-radius: 50px;
+	box-shadow: 0 10px 10px rgb(0 0 0 / 10%);
+}
+.filter-btn-area button.blue-btn {
+	margin-left: 20px;
+}
+
+#filter-pop button {
+	display: block;
+    font-size: 30px;
+    width: 100%;
+    text-align: left;
+    padding: 20px 0 20px 40px;
+}
+#filter-pop button.filter-reset {
+	background: url("../images/ico-reset.png")no-repeat 0 28px;
+}
+#filter-pop button.filter-save {
+	background: url("../images/ico-check.png")no-repeat 0 28px;
+}
+#filter-pop button.filter-call {
+	background: url("../images/ico-time.png")no-repeat 0 28px;
+}
+#filter-pop button img {
+    vertical-align: -5px;
+    margin-right: 10px;
+}
+#filter-pop button span {
+	display: block;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+#filter-reset-pop .btn {
+	font-size: 0;
+	margin-top: 30px;
+}
+#filter-reset-pop .btn button {
+	display: inline-block;
+	vertical-align: middle;
+	width: 46%;
+	height: 50px;
+	font-size: 15px;
+	margin: 0 1%;
+	border-radius: 50px;
+}
+.txt-pop {
+	display: none;
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: #000;
+    color: #fff;
+    font-size: 30px;
+    width: 500px;
+    padding: 12px 0 15px;
+    text-align: center;
+    z-index: 10;
+    border-radius: 10px;
+    font-weight: 300;
+}
+#save-txt {
+	width: 400px;
+}
+
+
+@media screen and (max-width: 750px) {
+	.type-exer > div {
+		width: calc(25% - 7.5px);
+	}
+}
+@media screen and (max-width: 380px) {
+	.type-exer > div {
+		width: calc(33.333% - 7px);
+	}
+	.type-exer > div:nth-child(4n) {
+		margin-right: 10px;
+	}
+	.type-exer > div:nth-child(3n) {
+		margin-right: 0;
+	}
+	.type-exer > div input[type=checkbox] + label {
+		padding: 10% 0;
+	}
+}

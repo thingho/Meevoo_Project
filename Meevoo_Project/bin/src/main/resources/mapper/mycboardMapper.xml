@@ -1,0 +1,82 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.MyCBoardMapper">
+
+	<!-- 운동모임 - 찜한 리스트 전체 가져오기 -->
+	<select id="selectClubPickAll" resultType="com.java.dto.CListPickDto">
+        select * from (select rownum rnum, c.* from
+		(select d.* from 
+        (select cpickno, b.cno cno, b.id id, cpickdate, cpickyn,
+        cnm, dongcate, cdodate from clubList a join 
+        (select * from clubpick where cpickyn='YES' and id=#{id}) b 
+        on a.cno = b.cno)d order by cpickno desc) c) 
+        where rnum between #{pageDto.startRow} and #{pageDto.endRow}
+	</select>
+	
+	<!-- 운동모임 - 찜한 리스트 전체 게시글 수 -->
+	<select id="selectListCPick" resultType="int">
+		select count(*) from clubPick where cpickyn='YES' and id=#{id}
+	</select>
+	
+	<!-- 체육시설 - 찜하기 취소-->
+	<update id="cancelCPick">
+		update clubpick set cpickyn='NO', cpickdate=sysdate where cno=#{cno} and id=#{id}
+	</update>
+	
+	
+	<!-- 운동모임 - 최근본 리스트 전체 가져오기 -->
+	<select id="selectClubCurrAll" resultType="com.java.dto.CListCurrDto">
+		select * from (select rownum rnum, c.* from
+		(select d.* from 
+        (select ccurrno, b.cno cno, b.id id, cnm, dongcate, cdodate, ccurrdate 
+        from clubList a join 
+        (select * from clubCurr where id=#{id}) b on a.cno = b.cno)
+        d order by ccurrdate desc) c) 
+        where rnum between 1 and 10
+	</select>
+	
+	<!-- 운동모임 - 최근본 리스트 전체 게시글 수 -->
+	<select id="selectListCCurr" resultType="int">
+		select count(*) from clubCurr
+	</select>
+	
+	
+	<!-- 운동모임 - 참여한 리스트 전체 가져오기 -->
+	<select id="selectClubJoinAll" resultType="com.java.dto.CListJoinDto">
+        select * from
+		(select rownum rnum, c.* from
+		(select distinct cno, cnm, dongcate, cdodate, cnowstatus from
+		(select d.* from 
+        (select clubreviewno, b.cno cno, id, cnm, dongcate, 
+        cdodate, giveid, cnowstatus from clubList
+        a join (select * from clubreviewtemp where giveid=#{id}) b 
+        on a.cno = b.cno)d order by clubreviewno desc))c)
+        where rnum between #{pageDto.startRow} and #{pageDto.endRow}
+	</select>
+	
+	<!-- 운동모임 - 참여한 리스트 전체 게시글 수 -->
+	<select id="selectListCJoin" resultType="int">
+		select count(*) from clubReviewTemp where giveid=#{id}		
+	</select>
+	
+	<!-- 참여한 리스트 1개 삭제 -->
+	<delete id="deleteCJoin">
+		delete clubreviewtemp where cno=#{cno}
+	</delete>
+	
+	
+	<!-- main에 표시될 가장 많이 찜한 운동 모임 -->
+	<select id="selectCPickTop4" resultType="com.java.dto.ClubDto">
+		select * from
+		(select rownum rnum, c.* from
+		(select cno, id, cnm, cwrdate, cimg, sfno, dongcate, cloc, cdodate,
+		ccontent, ctotalpick, crecruitlimit, cnowrecruit, cnowstatus, scate
+		from clublist
+		where cnowstatus = '모집중'
+		order by ctotalpick desc, cwrdate desc) c) 
+		where rnum between 1 and 4
+	</select>
+	
+	
+</mapper>

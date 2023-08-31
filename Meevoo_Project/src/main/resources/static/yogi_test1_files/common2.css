@@ -1,0 +1,165 @@
+@charset "UTF-8";
+*{outline:0}
+html,body{font-family:'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', '맑은고딕', 'Malgun Gothic', sans-serif;font-size:14px;line-height:1;color:rgba(0,0,0,0.87);-webkit-text-size-adjust:none} /* 폰트크기 자동조절 제거 */
+input::-ms-clear, input::-ms-reveal{display:none} /* IE - select arrow remove */
+input,button,div,li,form,label{-webkit-tap-highlight-color:rgba(0,0,0,0)} /* 하이라이트 제거 */
+section{display:block}
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;box-sizing: border-box;}
+ul,ol,li{list-style:none}
+button,input{appearance:none;-webkit-appearance:none;-moz-appearance:none;border-radius:0;font-family:'Pretendard', 'Apple SD Gothic Neo', '맑은 고딕', '맑은고딕', 'Malgun Gothic', sans-serif;}
+button{padding:0;cursor:pointer}
+button:focus,button:active{padding: 0;}
+button span{position: relative;}
+select::-ms-expand{display:none}
+label{cursor:pointer}
+
+
+/* Custom Input - Checkbox */
+input[type=checkbox].inp_chk {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].inp_chk + label.label_chk {padding:0 0 0 32px;height:21px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:16px;line-height:22px;color:rgba(0,0,0,0.56);vertical-align:top;cursor:pointer}
+input[type=checkbox].inp_chk:checked + label.label_chk{background-position:0 -21px}
+label.label_chk{
+	background-image:url('//image.goodchoice.kr/images/web_v3/ico_chk.png');
+	background-size:21px auto;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/*-----------------------------------------------------------*/
+/* golf - Radio 골프 */
+input[type=checkbox].golf {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].golf + label.label_golf {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: -200px 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].golf + label.label_golf:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px; background: url('/images/aa.png');background-size:49px auto}
+input[type=checkbox].golf:checked + label.label_golf:after{background-position:0 -24px}
+input[type=checkbox].golf:checked + label{color:rgba(242,17,76,0.87);}
+
+/* climbing - Radio 클라이밍 */
+input[type=checkbox].climbing {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].climbing + label.label_climbing {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].climbing + label.label_climbing:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -48px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].climbing:checked + label.label_climbing:after{background-position:-48px -24px}
+input[type=checkbox].climbing:checked + label{color:rgba(242,17,76,0.87);}
+
+/* tennis - Radio 테니스 */
+input[type=checkbox].tennis {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].tennis + label.label_tennis {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].tennis + label.label_tennis:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -96px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].tennis:checked + label.label_tennis:after{background-position:-96px -24px}
+input[type=checkbox].tennis:checked + label{color:rgba(242,17,76,0.87);}
+
+/* tabletennis - Radio 탁구 */
+input[type=checkbox].tabletennis {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].tabletennis + label.label_tabletennis {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].tabletennis + label.label_tabletennis:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -144px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].tabletennis:checked + label.label_tabletennis:after{background-position:-144px -24px}
+input[type=checkbox].tabletennis:checked + label{color:rgba(242,17,76,0.87);}
+
+/* basketball - Radio 농구 */
+input[type=checkbox].basketball {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].basketball + label.label_basketball {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].basketball + label.label_basketball:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') 0 0 no-repeat;background-size:192px auto}
+input[type=checkbox].basketball:checked + label.label_basketball:after{background-position:0 -24px}
+input[type=checkbox].basketball:checked + label{color:rgba(242,17,76,0.87);}
+
+/* bowling - Radio 볼링 */
+input[type=checkbox].bowling {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].bowling + label.label_bowling {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].bowling + label.label_bowling:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -48px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].bowling:checked + label.label_bowling:after{background-position:-48px -24px}
+input[type=checkbox].bowling:checked + label{color:rgba(242,17,76,0.87);}
+
+/* badminton - Radio 배드민턴 */
+input[type=checkbox].badminton {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].badminton + label.label_badminton {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].badminton + label.label_badminton:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -96px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].badminton:checked + label.label_badminton:after{background-position:-96px -24px}
+input[type=checkbox].badminton:checked + label{color:rgba(242,17,76,0.87);}
+
+/* futsal - Radio  풋살 */
+input[type=checkbox].futsal {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].futsal + label.label_futsal {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].futsal + label.label_futsal:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -144px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].futsal:checked + label.label_futsal:after{background-position:-144px -24px}
+input[type=checkbox].futsal:checked + label{color:rgba(242,17,76,0.87);}
+
+/* skate - Radio  스케이트 */
+input[type=checkbox].skate {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].skate + label.label_skate {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].skate + label.label_skate:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -144px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].skate:checked + label.label_skate:after{background-position:-144px -24px}
+input[type=checkbox].skate:checked + label{color:rgba(242,17,76,0.87);}
+
+/*3. 편의 시설*/
+/* Room - Radio 와이파이 */
+input[type=checkbox].wifi {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].wifi + label.label_wifi {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].wifi + label.label_wifi:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -48px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].wifi:checked + label.label_wifi:after{background-position:-48px -24px}
+input[type=checkbox].wifi:checked + label{color:rgba(242,17,76,0.87);}
+
+/* Room - Radio 반려동물 */
+input[type=checkbox].pet {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].pet + label.label_pet {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].pet + label.label_pet:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -96px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].pet:checked + label.label_pet:after{background-position:-96px -24px}
+input[type=checkbox].pet:checked + label{color:rgba(242,17,76,0.87);}
+
+/* Room - Radio  주차장 */
+input[type=checkbox].parking {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].parking + label.label_parking {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].parking + label.label_parking:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -144px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].parking:checked + label.label_parking:after{background-position:-144px -24px}
+input[type=checkbox].parking:checked + label{color:rgba(242,17,76,0.87);}
+
+/* Room - Radio  입구경사로 */
+input[type=checkbox].slope {position:absolute;z-index:-1000;left:-1000px;overflow:hidden;clip:rect(0 0 0 0);height:1px;width:1px;margin:-1px;padding:0;border:0}
+input[type=checkbox].slope + label.label_slope {position:relative;width:76px;padding:28px 0 0 0;height:46px;display:inline-block;background-repeat:no-repeat;background-position: 0 0;font-size:13px;line-height:normal;color:rgba(0,0,0,0.87);vertical-align:top;cursor:pointer;text-align:center}
+input[type=checkbox].slope + label.label_slope:after{display:inline-block;content:"";position:absolute;top:0;left:50%;width:48px;height:24px;margin:0 0 0 -24px;background:url('//image.goodchoice.kr/images/web_v3/ico_room.png') -144px 0 no-repeat;background-size:192px auto}
+input[type=checkbox].slope:checked + label.label_slope:after{background-position:-144px -24px}
+input[type=checkbox].slope:checked + label{color:rgba(242,17,76,0.87);}
+
+
+/*--------------------------------------------------------------------*/
+
+#myform fieldset{
+    display: inline-block;
+    direction: rtl;
+    border:0;
+    margin-left: 150px;
+    margin-top: 150px;
+}
+#myform fieldset legend{
+    text-align: right;
+}
+#myform input[type=radio]{
+    display: none;
+}
+#myform label{
+    font-size: 3em;
+    color: transparent;
+    text-shadow: 0 0 0 #f0f0f0;
+}
+#myform label:hover{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+#myform label:hover ~ label{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+#myform input[type=radio]:checked ~ label{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+#reviewContents {
+    width: 50%;
+    height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: solid 1.5px #D3D3D3;
+    border-radius: 5px;
+    font-size: 16px;
+    resize: none;
+}
+

@@ -1,0 +1,147 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.mapper.SportMapper">
+
+	<!-- 게시글 전체 개수 -->
+	<select id="selectListCount" resultType="int">
+		select count(*) from sportlist
+		<if test="slist_word != null">
+		   where sfnm like '%'||#{slist_word}||'%'
+		   <!-- or dongcate like '%'||#{slist_word}||'%' -->
+		</if>
+		<if test="sport != null">
+			and regexp_like(scate,#{sport})
+		</if>
+		<if test="dong_one != null">
+			and regexp_like(dongcate,#{dong_one})
+		</if>
+	</select>
+	
+	<!-- 게시글 전체 가져오기 -->
+	<select id="selectAll" resultType="com.java.dto.SportDto">
+		select * from (select rownum rnum, a.* from
+		(select * from sportlist
+		<if test="slist_word != null">
+		   where sfnm like '%'||#{slist_word}||'%'
+		   <!-- or dongcate like '%'||#{slist_word}||'%' -->
+		</if>
+		<if test="sport != null">
+			and regexp_like(scate,#{sport})
+		</if>
+		<if test="dong_one != null">
+			and regexp_like(dongcate,#{dong_one})
+		</if>
+		
+		<!-- 아랫부분 공통영역 -->
+		<![CDATA[
+		   order by sfno asc) a)
+		   where rnum>=#{startRow} and rnum<=#{endRow}
+		]]>
+	</select>
+
+	<!-- 게시글 1개 가져오기 -->
+	<select id="selectOne" resultType="com.java.dto.SportDto">
+		select * from sportlist where sfno=#{sfno}
+	</select>
+	
+	<!-- 1. 시설물 찜하기 등록 -->
+	<insert id="sportPick">
+	  <!-- <selectKey resultType="int" keyProperty="spickno" order="BEFORE">
+		select sportpick_seq.nextval from dual
+	  </selectKey> -->
+	  insert into sportpick (spickno, id, sfno, spickyn, spickdate)
+	  select sportpick_seq.nextval, #{id}, #{sfno}, #{spickyn}, sysdate
+	  from dual
+	  where not exists(
+	  select 1 from sportpick where id=#{id} and sfno=#{sfno})
+	  <!-- insert into sportpick values
+	  (#{spickno},#{id},#{sfno},#{spickyn},sysdate) -->
+	</insert>
+	
+	<!-- 찜하기 취소(삭제)하기 -->
+	<delete id="sportPickCancel">
+		delete sportpick where spickno=#{spickno}
+	</delete>
+	
+	<!-- 찜 Count -->
+	<select id="selectSpCount" resultType="int">
+		select count(*) from sportpick where id=#{id} and sfno=#{sfno}
+	</select>
+	
+	
+	<!-- 시설물 찜하기 전체 가져오기 -->
+	<select id="selectSpAll" resultType="com.java.dto.SportPickDto">
+		select * from sportpick where sfno=#{sfno} order by spickdate desc
+	</select>
+	
+	<!-- 시설물 찜하기 1개 가져오기 -->
+	<select id="selectSpOne" resultType="com.java.dto.SportPickDto">
+		select * from sportpick where spickno=#{spickno}
+	</select>
+	
+	
+	<!-- 최근본 시설 게시물 데이터 기록하기 -->
+	<insert id="insertSCurr">
+		insert into sportcurr values (sportcurr_seq.nextval, #{id}, #{sfno}, sysdate)
+	</insert>
+	
+	
+	<!-- 별점 총 갯수 -->
+	<update id="updateStarAll">
+		update sportlist set stotalstar = coalesce(
+		(select sum(sstar) from sportreview 
+		where sportreview.sfno = sportlist.sfno 
+		group by sfno), 0)
+	</update>
+	
+	<!-- 리뷰 총 갯수 -->
+	<update id="updatePeoAll">
+		update sportlist set stotalpeo = coalesce(
+		(select count(srecontent) from sportreview
+		where sportreview.sfno = sportlist.sfno
+		group by sfno), 0)
+	</update>
+	
+	
+	<!-- 게시글 하단 리뷰 모두 가져오기 -->
+	<select id="selectReAll" resultType="com.java.dto.SportReviewDto">
+		select * from sportreview where sfno=#{sfno} order by sredate desc
+	</select>
+	
+	
+	<!-- 게시글 하단 리뷰 저장하기 -->
+	<insert id="reviewInsert">
+	  <selectKey resultType="int" keyProperty="sreno" order="BEFORE">
+		select sportreview_seq.nextval from dual
+	  </selectKey>
+	  insert into sportreview values
+	  (#{sreno},#{sfno},#{id},#{srecontent},sysdate,#{sstar})
+	  
+	</insert>
+	
+	
+	<!-- 하단 리뷰 1개 가져오기 -->
+	<select id="selectReOne" resultType="com.java.dto.SportReviewDto">
+		select * from sportreview where sreno=#{sreno}
+	</select>
+	<!-- 하단 리뷰 1개 삭제하기 -->
+	<delete id="reviewDelete">
+		delete sportreview where sreno=#{sreno}
+	</delete>
+	
+	<!-- 수정한 하단 리뷰 저장하기-->
+	<update id="reviewUpdateSave">
+		update sportreview set srecontent=#{srecontent},sredate=sysdate where sreno=#{sreno}
+	</update>
+	
+	
+	<!-- 리뷰글에 대한 신고글 1개 작성 -->
+	<insert id="insertReportOne">
+		insert into sportreviewreport
+		values(sportreviewreport_srerepno.nextval,#{sreno},#{id},sysdate,
+		#{srerepcontent},#{srerepinput},#{srerepimg})
+	</insert>
+	
+</mapper>

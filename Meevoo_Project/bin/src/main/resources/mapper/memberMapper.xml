@@ -1,0 +1,52 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.MemberMapper">
+
+	<!-- 로그인 확인 -->
+	<select id="selectLogin" resultType="com.java.dto.MemberDto">
+		select * from userList where id=#{id} and pw=#{pw}
+	</select>
+
+	<!-- 회원가입시 입력한 정보 저장하기 -->
+	<insert id="insertMem">
+		insert into userList (id,pw,usernm,birth,email,
+		gender,dongcate,scate,joindate,nowjoin,totaltemp,addr) 
+		values(#{id}, #{pw}, #{usernm}, #{birth}, #{email},
+		#{gender}, #{dongcate}, #{scate}, sysdate, 1, 36.5, #{addr})
+	</insert>
+	
+	<!-- select에 scate 값 표시하기 -->
+	<select id="selectscateAll" resultType="String">
+		select distinct scate from sportList
+	</select>
+
+	<!-- select에 dongcate 값 표시하기 -->
+	<select id="selectdongcateAll" resultType="String">
+		select distinct dongcate from sportList
+	</select>
+	
+	<!-- id 중복체크 -->
+	<select id="selectIdOne" resultType="com.java.dto.MemberDto">
+		select * from userList where id=#{id}
+	</select>
+	
+	<!-- 멤버 정보 1개 가져오기 -->
+	<select id="selectMemOne" resultType="com.java.dto.MemberDto">
+		select * from userList where id=#{id}
+	</select>
+	
+	<!-- 회원 삭제 -->
+	<delete id="deleteUser">
+		delete userList where id=#{id}
+	</delete>
+	
+	<!-- 회원정보 수정 -->
+	<update id="updateSaveUser">
+		update userList set nicknm=#{nicknm}, dongcate=#{dongcate}, scate=#{scate},
+		selfintro=#{selfintro}, userimg=#{userimg} where id=#{id}
+<!-- 		update userList set nicknm=#{nicknm}, dongcate=#{dongcate}, scate=#{scate},
+		selfintro=#{selfintro}, userimg=#{userimg} where id=#{id} -->
+	</update>
+	
+</mapper>

@@ -1,0 +1,265 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.mapper.NoticeMapper">
+
+<!-- 공지사항 전체 가져오기 -->
+   <select id="selectNoticeAll" resultType="com.java.dto.NoticeDto">
+      
+      select * from (select rownum rnum,a.* from 
+	     (select * from notice 
+		   <![CDATA[
+           order by notidate desc) a)
+		   where rnum >= #{startRow} and rnum <= #{endRow}
+		   ]]>
+   </select>
+   
+      <!-- 공지사항 전체개수 -->
+   <select id="selectListCount" resultType="int">
+       select count(*) from notice
+   </select>
+   
+   <!-- 공지사항 가져오기   -->
+   <select id="selectNoticeListCount" resultType="int">
+      select count(*) from notice
+   </select>
+   
+   <!-- 공지사항 상세페이지 : noticeView -->
+   <select id="selectNoticeOne" resultType="com.java.dto.NoticeDto">
+   select * from notice where notino=#{notino}
+   </select>
+   
+   <!-- 공지사항 추가하기 -->
+   <insert id="insertNotice">
+   insert into notice 
+
+   values 
+(
+notice_seq.nextval ,
+'admin',
+#{notititle},
+sysdate,
+#{noticontent},
+#{notihit},
+#{notiimg}
+)</insert>
+   
+<!-- 1) 수정할 공지사항 가져오기 -->
+   <select id="selectNMOne" resultType="com.java.dto.NoticeDto">
+      select * from notice where notino = #{notino}
+   </select>
+   
+   <!-- 공지사항 수정사항 저장하기 -->
+   <update id="updateNMOne">
+      update notice set
+      
+      <if test="notiimg != null">
+      notino=#{notino},notiid=#{notiid}, notidate=#{notidate}, noticontent=#{noticontent}, notiimg=#{notiimg}
+      where notino=#{notino}
+      </if>
+      <if test="notiimg == null">
+      notino=#{notino},notiid=#{notiid}, notidate=#{notidate}, noticontent=#{noticontent}
+      where notino=#{notino}
+      </if>
+      
+   </update>
+      
+      
+   <!-- 공지사항 삭제하기 -->
+   <delete id="deleteOne">
+      delete notice where notino=#{notino}
+   </delete>
+   
+   
+   
+   
+<!-- FAQ --> 
+
+   <!-- 1. FAQ 전체 가져오기 -->
+   <select id="selectFAQAll" resultType="com.java.dto.FAQDto">
+          select * from ( select rownum rnum,a.* from
+			(select * from faq 
+			order by faqno desc) a
+			)where rnum between #{startRow} and #{endRow}
+   </select>
+   
+   <!-- 2) 전체 FAQ 가져오기: 전체 개수 카운팅 -->
+	   <select id = "selectFAQListCount" resultType="int">
+	      select count(*) from faq
+	   </select>
+   
+   
+   <!-- 2. FAQ 추가하기 -->
+   <insert id="insertFAQ">
+   insert into FAQ values (faq_seq.nextval , #{faqq}, #{faqa})
+   </insert>
+   
+   <!-- 3) 수정할 FAQ 가져오기 -->
+   <select id="selectFMOne" resultType="com.java.dto.FAQDto">
+      select * from faq where faqno = #{faqno}
+   </select>
+   
+   <!-- FAQ 수정사항 저장하기 -->
+   <update id="updateFMOne">
+      update faq set 
+      faqno=#{faqno}, faqq=#{faqq}, faqa=#{faqa}
+      where faqno=#{faqno}
+   </update>
+   
+   <!-- FAQ 삭제하기 -->
+   <delete id="deleteFAQOne">
+      delete faq where faqno=#{faqno}
+   </delete>
+   
+   
+ <!-- QnA -->  
+   
+   <!-- QnA 전체 가져오기 -->
+   <select id="selectQnAAll" resultType="com.java.dto.QnADto">
+         select * from ( select rownum rnum,a.* from
+			(select * from qna 
+			
+			
+		   <!-- <if test="search.category == 'all'">
+			   where id like '%'||#{search.search_input}||'%' or cnm like '%'||#{search.search_input}||'%' or sfno like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'id'">
+			   where id like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'cnm'">
+			   where cnm like '%'||#{search.search_input}||'%'
+		   </if>
+		   <if test="search.category == 'sfno'">
+			   where sfno like '%'||#{search.search_input}||'%'
+		   </if> -->
+			
+			order by qgroup desc, qstep asc) a
+			)where rnum between #{pageDto.startRow} and #{pageDto.endRow}
+      
+   </select>
+   
+   <!-- QnA 가져오기   -->
+   <select id="selectQnAListCount" resultType="int">
+      select count(*) from qna
+      <if test="search_input != null and search_input != '' ">
+		   where id like '%'||#{search_input}||'%'
+	  </if>
+	 order by qgroup desc,qstep asc
+   </select>
+   
+   <!-- QnA 상세페이지  -->
+   <select id="selectQnAOne" resultType="com.java.dto.QnADto">
+   select * from qna where qnano=#{qnano}
+   </select>
+   
+   <!-- QnA 추가하기 -->
+   <insert id="insertQnA">
+   INSERT INTO qna 
+      (
+   qnano,
+   id,
+   qnatitle,
+   qnadate,
+   qnacontent,
+   qnastatus,
+   qstep,
+   qgroup,
+   qindent
+   )
+   
+   VALUES (
+     qna_seq.nextval,
+     #{id},
+     #{qnatitle},
+     sysdate,
+     #{qnacontent},
+     #{qnastatus},
+     1,
+     qna_seq.currval,
+     0
+     )
+   </insert>
+   
+   <!-- QnA 삭제하기 -->
+   <delete id="deleteQnAOne">
+      delete qna where qnano=#{qnano}
+   </delete>
+   
+   <!-- QnA 답글달기 불러오기 -->
+   <select id="selectQROne">
+      select * from qna where qnano=#{qnano}
+   </select>
+   
+   <update id="updateQstepCount">
+   <![CDATA[
+   update qna set qstep=qstep+1 where qgroup=#{qgroup} and qstep>#{qstep}
+   ]]>
+   </update>
+   
+   <!-- QnA 답글 저장하기 -->
+   <insert id="doQnAReply">
+   INSERT INTO qna 
+         (
+   qnano,
+   id,
+   qnatitle,
+   qnadate,
+   qnacontent,
+   qnastatus,
+   qstep,
+   qgroup,
+   qindent
+   )
+   VALUES (
+     qna_seq.nextval,
+     #{id},
+     #{qnatitle},
+     sysdate,
+     #{qnacontent},
+     #{qnastatus},
+     #{qstep}+1,
+     #{qgroup},
+     #{qindent}+1
+     )
+   </insert>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+
+</mapper>

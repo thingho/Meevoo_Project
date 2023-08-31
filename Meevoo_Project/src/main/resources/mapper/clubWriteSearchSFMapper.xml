@@ -1,0 +1,30 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.mapper.ClubWriteSearchSFMapper">
+
+	<!-- 운동모임장소 찾기 체육시설 목록 전체 가져오기 -->
+	<select id="selectClubSearchSFAll" resultType="com.java.dto.SportDto">
+		   
+		select * from 
+		  (select rownum rnum, a.* from
+		    (select * from sportlist
+		     order by sfno asc) a)
+		where rnum between #{startRow} and #{endRow}   
+		   
+		<!-- 
+		select * from (select rownum rnum, a.* from
+		  (select * from sportlist
+           where sfnm like '%'||#{s_word}||'%' or scate like '%'||#{s_word}||'%' or dongcate like '%'||#{s_word}||'%'
+		   order by sfno asc) a)
+		   where rnum between #{pageDto.startRow} and #{pageDto.endRow}
+	 -->
+	</select>
+	
+	<!-- 운동모임장소 찾기 체육시설 목록 전체 개수 -->
+	<select id="selectListCount" resultType="int">
+		select count(*) from sportlist
+	</select>
+
+</mapper>

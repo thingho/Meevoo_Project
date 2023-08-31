@@ -1,0 +1,84 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.MySBoardMapper">
+
+	<!-- 체육시설 - 찜한 리스트 전체 가져오기 -->
+	<select id="selectSportPickAll" resultType="com.java.dto.SListPickDto">
+        select * from (select rownum rnum, c.* from
+		(select d.* from 
+        (select spickno, b.sfno sfno, id, spickdate, spickyn,
+        sfnm, dongcate from sportList a join 
+        (select * from sportPick where spickyn='YES' or spickyn='Yes' and id=#{id}) b
+        on a.sfno = b.sfno)d order by spickno desc) c )
+        where rnum between #{pageDto.startRow} and #{pageDto.endRow}
+	</select>
+	
+	<!-- 체육시설 - 찜한 리스트 전체 게시글 수 -->
+	<select id="selectListSPick" resultType="int">
+		select count(*) from sportPick where (spickyn='YES' or spickyn='Yes') and id=#{id}
+	</select>
+	
+	<!-- 체육시설 - 찜하기 취소-->
+	<update id="cancelSPick">
+		update sportpick set spickyn='NO', spickdate=sysdate where sfno=#{sfno} and id=#{id}
+	</update>
+	
+	<!-- 체육시설 - 찜한 리스트 1개 가져오기 -->
+	<!-- <select id="selectOne" resultType="com.java.dto.SportDto">
+		select * from sportlist where sfno=#{sfno}
+	</select> -->
+	
+
+	<!-- 체육시설 - 최근본 리스트 전체 가져오기 -->
+	<select id="selectSportCurrAll" resultType="com.java.dto.SListCurrDto">
+        select * from (select rownum rnum, c.* from
+		(select d.* from 
+        (select scurrno, b.sfno sfno, id, sfnm, dongcate, scurrdate
+        from sportList a join 
+        (select * from sportCurr where id=#{id}) b on a.sfno = b.sfno)
+        d order by scurrdate desc) c) 
+        where rnum between 1 and 10
+	</select>
+	
+	<!-- 체육시설 - 최근본 리스트 전체 게시글 수 -->
+	<select id="selectListSCurr" resultType="int">
+		select count(*) from sportCurr
+	</select>
+	
+	
+	<!-- 체육시설 - 후기 작성한 리스트 전체 가져오기 -->
+	<select id="selectSportReviewAll" resultType="com.java.dto.SListReviewDto">
+        select * from (select rownum rnum, c.* from
+		(select d.* from 
+        (select sreno, b.sfno sfno, id, sfnm, dongcate, sredate
+        from sportList a join  
+        (select * from sportreview where id=#{id})b
+        on a.sfno = b.sfno)d order by sreno desc) c) 
+        where rnum between #{pageDto.startRow} and #{pageDto.endRow}
+	</select>
+	
+	<!-- 체육시설 - 후기 작성한 리스트 전체 게시글 수 -->
+	<select id="selectListSReview" resultType="int">
+		select count(*) from sportReview where id=#{id}
+	</select>
+	
+	
+	<!-- main에 표시될 가장 많이 찜한 체육시설 -->
+	<!-- <select id="selectSPickTop4" resultType="com.java.dto.SportDto">
+		select * from
+		(select rownum rnum, c.* from
+		(select cno, id, cnm, cwrdate, cimg, sfno, dongcate, cloc, cdodate,
+		ccontent, ctotalpick, crecruitlimit, cnowrecruit, cnowstatus, scate
+		from clublist
+		where cnowstatus = '모집중'
+		order by ctotalpick desc, cwrdate desc) c) where rnum between 1 and 4
+	</select> -->
+	
+	<!-- 후기 작성한 리스트 1개 삭제 -->
+	<delete id="deleteSReview">
+		delete sportreview where sfno=#{sfno}
+	</delete>
+	
+	
+</mapper>
